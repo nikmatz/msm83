@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<title>ΜΣΜ83 – Ανάλυση | Quick Check</title>
+
+<style>
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    margin: 40px;
+    background: #fafafa;
+    line-height: 1.5;
+}
+h1, h2 {
+    color: #900;
+    margin-bottom: 8px;
+}
+.card {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    max-width: 750px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+.question-text {
+    font-size: 1.25rem;
+    margin-bottom: 15px;
+}
+.answers label {
+    display: block;
+    margin: 8px 0;
+    cursor: pointer;
+    font-size: 1.1rem;
+}
+button {
+    margin-top: 20px;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    background: #900;
+    color: #fff;
+    cursor: pointer;
+    font-size: 1rem;
+}
+button:hover { background: #b00000; }
+#explanation {
+    margin-top: 15px;
+    padding: 12px;
+    background: #f4f4f4;
+    border-left: 4px solid #666;
+    display: none;
+    font-size: 1.05rem;
+}
+.result {
+    margin-top: 12px;
+    font-weight: bold;
+    display: none;
+}
+.correct { color: #0a7300; }
+.incorrect { color: #b00020; }
+#nav-buttons button {
+    background:#555;
+    margin-right:10px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Μεταπτυχιακές Σπουδές στα Μαθηματικά (ΜΣΜ)</h1>
+<h2>ΜΣΜ83 – Ανάλυση</h2>
+<h2>Quick Check – Νόρμες, Ισοδυναμία & Χώροι Banach</h2>
+
+<div class="card">
+
+  <div id="question-number" style="font-weight:bold;margin-bottom:10px;"></div>
+  <div id="question-text" class="question-text"></div>
+
+  <div id="answers" class="answers"></div>
+
+  <div id="result" class="result"></div>
+
+  <button id="showExplanationBtn" style="display:none;">Εμφάνιση Εξήγησης</button>
+  <div id="explanation"></div>
+
+  <div id="nav-buttons" style="margin-top:25px;">
+    <button id="prevBtn" style="display:none;">Προηγούμενη</button>
+    <button id="nextBtn" style="display:none;">Επόμενη</button>
+  </div>
+
+</div>
+
+<script>
+const quiz = [
+
+/* --------------------------- ΕΡΩΤΗΣΗ 1 --------------------------- */
+{
+q:"Ποια από τις παρακάτω ιδιότητες ΔΕΝ απαιτείται για μια νόρμα;",
+answers:{
+a:"Μη αρνητικότητα: ‖x‖ ≥ 0",
+b:"Ομοιογένεια: ‖λx‖ = |λ|‖x‖",
+c:"Τριγωνική ανισότητα: ‖x+y‖ ≤ ‖x‖ + ‖y‖",
+d:"Συμμετρία: ‖x‖ = ‖–x‖"
+},
+correct:"d",
+explanation:
+"Η συμμετρία είναι ιδιότητα μετρικής, όχι νόρμας. Η νόρμα εφαρμόζεται σε ΜΟΝΑ στοιχεία, όχι σε ζεύγη. " +
+"Η τριγωνική και η ομοιογένεια είναι βασικές για να συνδέσουμε άλγεβρα και γεωμετρία. Η ισότητα ‖x+y‖=‖x‖+‖y‖ ισχύει ΜΟΝΟ αν τα διανύσματα είναι θετικά πολλαπλάσια."
+},
+
+/* --------------------------- ΕΡΩΤΗΣΗ 2 --------------------------- */
+{
+q:"Ποια από τις παρακάτω εκφράζει σωστά τη σχέση νόρμας–μετρικής;",
+answers:{
+a:"Κάθε μετρικός χώρος προέρχεται από νόρμα.",
+b:"Κάθε νόρμα δίνει μετρική: ρ(x,y)=‖x−y‖.",
+c:"Η μετρική μετρά μέγεθος, η νόρμα απόσταση.",
+d:"Η μετρική απαιτεί ομοιογένεια."
+},
+correct:"b",
+explanation:
+"Κάθε νόρμα παράγει μετρική μέσω του τύπου ρ(x,y)=‖x−y‖. Όμως ΔΕΝ ισχύει το αντίστροφο. " +
+"Υπάρχουν μετρικές που δεν προέρχονται από νόρμα, π.χ. διακριτή μετρική. " +
+"Η νόρμα είναι πιο «άκαμπτη» δομή από μια γενική μετρική."
+},
+
+/* --------------------------- ΕΡΩΤΗΣΗ 3 --------------------------- */
+{
+q:"Πότε δύο νόρμες θεωρούνται ισοδύναμες;",
+answers:{
+a:"Όταν είναι ίσες σε όλα τα στοιχεία.",
+b:"Όταν υπάρχουν c,C>0 ώστε c‖x‖₁ ≤ ‖x‖₂ ≤ C‖x‖₁.",
+c:"Όταν έχουν διαφορετικά ανοικτά σύνολα.",
+d:"Όταν ορίζουν διαφορετικές ακολουθίες σύγκλισης."
+},
+correct:"b",
+explanation:
+"Η διπλή ανισότητα εξασφαλίζει ότι οι δύο νόρμες «μεγαλώνουν» με τον ίδιο ρυθμό. " +
+"Δίνουν την ίδια τοπολογία: ίδιες ακολουθίες σύγκλισης, ίδια ανοικτά σύνολα, ίδιες συνεχείς συναρτήσεις."
+},
+
+/* --------------------------- ΕΡΩΤΗΣΗ 4 --------------------------- */
+{
+q:"Ποια πρόταση είναι σωστή για τις ℓᵖ νόρμες στο ℝᵏ;",
+answers:{
+a:"Δεν είναι ισοδύναμες για διαφορετικά p.",
+b:"Είναι ισοδύναμες για όλα τα p≥1.",
+c:"Μόνο η ℓ² είναι νόρμα.",
+d:"Μόνο η ℓ∞ είναι πλήρης."
+},
+correct:"b",
+explanation:
+"Σε πεπερασμένη διάσταση όλες οι νόρμες είναι ισοδύναμες. " +
+"Η γεωμετρία αλλάζει (κύκλος, ρόμβος, τετράγωνο), αλλά η τοπολογία είναι ίδια. " +
+"Η ισοδυναμία σημαίνει ίδια σύγκλιση και ίδια ανοικτά σύνολα."
+},
+
+/* --------------------------- ΕΡΩΤΗΣΗ 5 --------------------------- */
+{
+q:"Τι χαρακτηρίζει μια Cauchy ακολουθία;",
+answers:{
+a:"Πρέπει να συγκλίνει σημειακά.",
+b:"Τα στοιχεία της γίνονται τελικά αυθαίρετα κοντινά μεταξύ τους.",
+c:"Πρέπει να είναι μονότονη.",
+d:"Έχει πάντα όριο 0."
+},
+correct:"b",
+explanation:
+"Μια Cauchy ακολουθία δεν απαιτεί να ξέρουμε το όριό της. " +
+"Ζητούμε να γίνεται «εσωτερικά σταθερή»: τα στοιχεία πλησιάζουν μεταξύ τους. " +
+"Σε Banach χώρους κάθε Cauchy ακολουθία συγκλίνει, και αυτό είναι κρίσιμο."
+},
+
+/* --------------------------- ΕΡΩΤΗΣΗ 6 --------------------------- */
+{
+q:"Ποιος είναι ο σωστός ορισμός χώρου Banach;",
+answers:{
+a:"Κάθε χώρος με νόρμα.",
+b:"Κάθε πεπερασμένης διάστασης χώρος.",
+c:"Χώρος με νόρμα που είναι πλήρης.",
+d:"Χώρος όπου ισχύει μόνο η τριγωνική ανισότητα."
+},
+correct:"c",
+explanation:
+"Χώρος Banach = χώρος με νόρμα + πληρότητα. " +
+"H πληρότητα σημαίνει ότι δεν «λείπουν» όρια Cauchy ακολουθιών. Αυτό επιτρέπει ισχυρά θεωρήματα όπως το Banach Fixed Point."
+},
+
+/* --------------------------- ΕΡΩΤΗΣΗ 7 --------------------------- */
+{
+q:"Γιατί το C([a,b]) με τη νόρμα L¹ δεν είναι Banach;",
+answers:{
+a:"Δεν είναι μετρικός χώρος.",
+b:"Δεν είναι καλοκαθορισμένη νόρμα.",
+c:"Υπάρχουν Cauchy ακολουθίες συνεχών που συγκλίνουν σε μη συνεχείς.",
+d:"Αποτυγχάνει η τριγωνική ανισότητα."
+},
+correct:"c",
+explanation:
+"Με το ‖f‖₁ = ∫|f| υπάρχουν ακολουθίες συνεχών συναρτήσεων που είναι Cauchy, αλλά το όριό τους έχει άλμα → δεν είναι συνεχές. " +
+"Άρα το όριο «φεύγει» από τον χώρο → έλλειψη πληρότητας."
+},
+
+/* --------------------------- ΕΡΩΤΗΣΗ 8 --------------------------- */
+{
+q:"Ποια από τις παρακάτω είναι αληθής για τους ℓᵖ χώρους;",
+answers:{
+a:"Όλοι οι ℓᵖ είναι Banach.",
+b:"Μόνο ο ℓ² είναι Banach.",
+c:"Μόνο ο ℓ∞ είναι Banach.",
+d:"Κανένας δεν είναι πλήρης."
+},
+correct:"a",
+explanation:
+"Κάθε ℓᵖ, 1 ≤ p ≤ ∞, είναι πλήρης. " +
+"Ο ℓ² είναι επιπλέον Hilbert επειδή η νόρμα του προέρχεται από εσωτερικό γινόμενο."
+},
+
+/* --------------------------- ΕΡΩΤΗΣΗ 9 --------------------------- */
+{
+q:"Τι ισχύει για τους χώρους Hilbert;",
+answers:{
+a:"Είναι Banach με εσωτερικό γινόμενο.",
+b:"Είναι όλοι άπειρης διάστασης.",
+c:"Κάθε Banach είναι Hilbert.",
+d:"Η νόρμα δεν προέρχεται από εσωτερικό γινόμενο."
+},
+correct:"a",
+explanation:
+"Οι Hilbert είναι πλήρεις ως προς τη νόρμα του εσωτερικού γινομένου. " +
+"Όχι κάθε Banach είναι Hilbert: μόνο όσοι ικανοποιούν τον κανόνα παραλληλογράμμου."
+},
+
+/* --------------------------- ΕΡΩΤΗΣΗ 10 --------------------------- */
+{
+q:"Γιατί η πληρότητα είναι κρίσιμη σε εφαρμογές της Ανάλυσης;",
+answers:{
+a:"Εξασφαλίζει ότι υπάρχουν ανοικτά σύνολα.",
+b:"Εγγυάται ότι όρια ακολουθιών λύσεων παραμένουν στον χώρο.",
+c:"Κάνει πιο εύκολο τον υπολογισμό νόρμων.",
+d:"Δίνει ισοδυναμία μετρικών."
+},
+correct:"b",
+explanation:
+"Σε PDEs, functional analysis, επαναληπτικές μεθόδους, η λύση προκύπτει ως όριο ακολουθιών. " +
+"Χωρίς πληρότητα, το όριο μπορεί να μην ανήκει στον χώρο → η μέθοδος αποτυγχάνει."
+}
+
+]; // END QUIZ ARRAY
+
+
+/* ------------------------ JS LOGIC ------------------------ */
+
+let current = 0;
+
+function loadQuestion() {
+    const q = quiz[current];
+    document.getElementById("question-number").textContent =
+        `Ερώτηση ${current+1} / ${quiz.length}`;
+    document.getElementById("question-text").textContent = q.q;
+
+    let html = "";
+    for (const key in q.answers) {
+        html += `
+        <label>
+            <input type="radio" name="ans" value="${key}">
+            ${q.answers[key]}
+        </label>`;
+    }
+    document.getElementById("answers").innerHTML = html;
+
+    document.getElementById("result").style.display = "none";
+    document.getElementById("showExplanationBtn").style.display = "none";
+    document.getElementById("explanation").style.display = "none";
+
+    document.getElementById("prevBtn").style.display =
+        current > 0 ? "inline-block" : "none";
+    document.getElementById("nextBtn").style.display = "none";
+}
+
+document.getElementById("answers").addEventListener("change", () => {
+    const selected = document.querySelector("input[name='ans']:checked");
+    const resultDiv = document.getElementById("result");
+    const q = quiz[current];
+
+    if (!selected) return;
+
+    if (selected.value === q.correct) {
+        resultDiv.textContent = "Σωστό!";
+        resultDiv.className = "result correct";
+    } else {
+        resultDiv.textContent = "Λάθος.";
+        resultDiv.className = "result incorrect";
+    }
+
+    resultDiv.style.display = "block";
+    document.getElementById("showExplanationBtn").style.display = "inline-block";
+    document.getElementById("nextBtn").style.display = "inline-block";
+});
+
+document.getElementById("showExplanationBtn")
+.addEventListener("click", () => {
+    const box = document.getElementById("explanation");
+    box.textContent = quiz[current].explanation;
+    box.style.display =
+        (box.style.display === "none") ? "block" : "none";
+});
+
+document.getElementById("nextBtn").addEventListener("click", () => {
+    if (current < quiz.length - 1) current++;
+    loadQuestion();
+});
+
+document.getElementById("prevBtn").addEventListener("click", () => {
+    if (current > 0) current--;
+    loadQuestion();
+});
+
+loadQuestion();
+</script>
+
+</body>
+</html>
