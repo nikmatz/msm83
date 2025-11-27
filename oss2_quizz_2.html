@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <title>Quick Check – Εσωτερικά Γινόμενα & Χώροι Hilbert</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0 10px 40px 10px;
+        }
+
+        h1 {
+            color: #8b0000;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 2.1rem;
+        }
+
+        h2 {
+            text-align: center;
+            color: #222;
+            margin-top: 0;
+        }
+
+        h3 {
+            text-align: center;
+            color: #b22222;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background-color: #ffffff;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 25px 25px 30px 25px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+        }
+
+        .question-header {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #444;
+        }
+
+        #question-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .answer-option {
+            margin: 8px 0;
+            padding: 6px 8px;
+            border-radius: 4px;
+        }
+
+        .answer-option:hover {
+            background-color: #f0f0f0;
+        }
+
+        .answer-option input {
+            margin-right: 8px;
+        }
+
+        #feedback {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .correct {
+            color: #007700;
+        }
+
+        .incorrect {
+            color: #b00020;
+        }
+
+        #explanation {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px dashed #ccc;
+            font-size: 0.95rem;
+        }
+
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            background-color: #b22222;
+            color: #ffffff;
+            font-size: 0.95rem;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: default;
+        }
+
+        button.secondary {
+            background-color: #666666;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #444;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Μεταπτυχιακές Σπουδές στα Μαθηματικά (ΜΣΜ)</h1>
+    <h2>ΜΣΜ83 – Ανάλυση</h2>
+    <h3>Quick Check – Εσωτερικά Γινόμενα, Χώροι Hilbert & Bergman</h3>
+
+    <div class="card">
+        <div class="quiz-header">
+            Ερώτηση <span id="question-number">1</span> / <span id="total-questions">6</span>
+        </div>
+
+        <div id="question-text"></div>
+        <div id="answers"></div>
+
+        <div id="feedback"></div>
+
+        <div class="buttons">
+            <button id="showExplanationBtn">Εμφάνιση Εξήγησης</button>
+            <button id="prevBtn" class="secondary">Προηγούμενη</button>
+            <button id="nextBtn" class="secondary">Επόμενη</button>
+        </div>
+
+        <div id="explanation"></div>
+    </div>
+
+    <script>
+        const quiz = [
+
+            /* --------------------------- ΕΡΩΤΗΣΗ 1 --------------------------- */
+            {
+                q: "Ποια πρόσθετη ιδιότητα πρέπει να ικανοποιεί ένα ημι-εσωτερικό γινόμενο ώστε να είναι (πραγματικό) εσωτερικό γινόμενο;",
+                answers: {
+                    a: "Γραμμικότητα στο πρώτο όρισμα.",
+                    b: "Μη αρνητικότητα: u(x, x) ≥ 0 για κάθε x.",
+                    c: "Συμμετρία: u(x, y) = u(y, x).",
+                    d: "Θετική οριστικότητα: u(x, x) = 0 μόνο όταν x = 0."
+                },
+                correct: "d",
+                explanation:
+                    "Στις διαφάνειες ορίζεται πρώτα το ημι-εσωτερικό γινόμενο με τις ιδιότητες γραμμικότητας, " +
+                    "συμμετρίας και μη αρνητικότητας. Για να γίνει **εσωτερικό γινόμενο** απαιτούμε επιπλέον την " +
+                    "ιδιότητα **θετικής οριστικότητας**, δηλαδή u(x, x) = 0 ⇔ x = 0. Αυτή η ιδιότητα “ξεχωρίζει” " +
+                    "τους χώρους Hilbert από πιο γενικούς ημι-εσωτερικούς χώρους."
+            },
+
+            /* --------------------------- ΕΡΩΤΗΣΗ 2 --------------------------- */
+            {
+                q: "Στον χώρο ℝⁿ με το συνηθισμένο εσωτερικό γινόμενο 〈x, y〉 = Σ xᵢyᵢ, τι σημαίνει η σχέση 〈x, y〉 = 0;",
+                answers: {
+                    a: "Ότι x = 0 ή y = 0.",
+                    b: "Ότι τα διανύσματα x και y έχουν το ίδιο μήκος.",
+                    c: "Ότι τα διανύσματα x και y είναι ορθογώνια (κάθετα) μεταξύ τους.",
+                    d: "Ότι η απόσταση μεταξύ x και y είναι 0."
+                },
+                correct: "c",
+                explanation:
+                    "Γεωμετρικά, το εσωτερικό γινόμενο μετράει “πόσο παράλληλα” είναι δύο διανύσματα. " +
+                    "Η συνθήκη 〈x, y〉 > 0 σημαίνει ότι έχουν «ίδια κατεύθυνση», 〈x, y〉 < 0 «αντίθετη κατεύθυνση», " +
+                    "και 〈x, y〉 = 0 σημαίνει ότι δεν υπάρχει καθόλου επικάλυψη → τα διανύσματα είναι " +
+                    "**ορθογώνια**. Στο ℝⁿ αυτό είναι η συνήθης έννοια της καθετότητας."
+            },
+
+            /* --------------------------- ΕΡΩΤΗΣΗ 3 --------------------------- */
+            {
+                q: "Ποια από τις παρακάτω διατυπώσεις είναι η ανισότητα Cauchy–Bunyakovsky–Schwarz σε χώρο Hilbert H;",
+                answers: {
+                    a: "‖x + y‖² + ‖x − y‖² = 2(‖x‖² + ‖y‖²).",
+                    b: "|〈x, y〉| ≤ ‖x‖ · ‖y‖.",
+                    c: "〈x, x〉 ≥ 0 για κάθε x ∈ H.",
+                    d: "|〈x, y〉| ≥ ‖x‖ · ‖y‖."
+                },
+                correct: "b",
+                explanation:
+                    "Η ανισότητα **Cauchy–Bunyakovsky–Schwarz (CBS)** λέει ότι για κάθε x, y σε χώρο Hilbert ισχύει " +
+                    "|〈x, y〉| ≤ ‖x‖‖y‖. Πρόκειται για θεμελιώδη ανισότητα: από αυτήν προκύπτει η τριγωνική ανισότητα " +
+                    "της νόρμας που ορίζεται από το εσωτερικό γινόμενο, καθώς και ο ορισμός της γωνίας μεταξύ " +
+                    "δύο διανυσμάτων μέσω του συνημιτόνου."
+            },
+
+            /* --------------------------- ΕΡΩΤΗΣΗ 4 --------------------------- */
+            {
+                q: "Ποια συνθήκη χαρακτηρίζει τις νόρμες που προέρχονται από εσωτερικό γινόμενο;",
+                answers: {
+                    a: "Ισχύει ο Νόμος του Παραλληλογράμμου: ‖x + y‖² + ‖x − y‖² = 2(‖x‖² + ‖y‖²).",
+                    b: "Ο χώρος είναι πεπερασμένης διάστασης.",
+                    c: "Ισχύει η τριγωνική ανισότητα.",
+                    d: "Κάθε Cauchy ακολουθία είναι φραγμένη."
+                },
+                correct: "a",
+                explanation:
+                    "Στις διαφάνειες παρουσιάζεται ο **Νόμος Παραλληλογράμμου** και η **Πολική Ταυτότητα**. " +
+                    "Ισχύει ότι μια νόρμα προέρχεται από εσωτερικό γινόμενο **αν και μόνο αν** ικανοποιεί τον " +
+                    "νόμο του παραλληλογράμμου. Παράδειγμα: η νόρμα ‖·‖₂ ικανοποιεί τον νόμο και προέρχεται από " +
+                    "εσωτερικό γινόμενο, ενώ η ‖·‖₁ και η ‖·‖∞ στο ℝ² δεν τον ικανοποιούν, άρα δεν προέρχονται " +
+                    "από εσωτερικό γινόμενο."
+            },
+
+            /* --------------------------- ΕΡΩΤΗΣΗ 5 --------------------------- */
+            {
+                q: "Ποιος από τους παρακάτω χώρους είναι χώρος Hilbert;",
+                answers: {
+                    a: "ℓ¹ με την νόρμα ‖x‖₁ = Σ|xₙ|.",
+                    b: "ℓ∞ με την νόρμα ‖x‖∞ = sup |xₙ|.",
+                    c: "L²([a, b]) με την συνήθη L² νόρμα.",
+                    d: "C([a, b]) με την υπερβολική νόρμα ‖f‖∞ = sup|f(x)|."
+                },
+                correct: "c",
+                explanation:
+                    "Από τις διαφάνειες: οι χώροι **ℓ²** και **L²([a, b])** είναι κλασικά παραδείγματα χώρων Hilbert. " +
+                    "Η νόρμα τους προέρχεται από εσωτερικό γινόμενο και οι χώροι είναι πλήρεις. Αντίθετα οι ℓ¹, ℓ∞ " +
+                    "και C([a, b]) με ‖·‖∞ είναι μεν χώροι Banach (πλήρεις ως προς τη νόρμα τους), αλλά **δεν** " +
+                    "είναι Hilbert, γιατί η νόρμα τους δεν ικανοποιεί τον νόμο του παραλληλογράμμου."
+            },
+
+            /* --------------------------- ΕΡΩΤΗΣΗ 6 --------------------------- */
+            {
+                q: "Ποιος είναι, σε γενικές γραμμές, ο ορισμός του χώρου Bergman L²ₐ(G);",
+                answers: {
+                    a: "Όλες οι τετραγωνικά ολοκληρώσιμες συναρτήσεις στο G (δηλαδή ο κλασικός χώρος L²(G)).",
+                    b: "Όλες οι αναλυτικές συναρτήσεις στο G, χωρίς καμία συνθήκη ολοκληρωσιμότητας.",
+                    c: "Οι αναλυτικές συναρτήσεις στο G για τις οποίες ∫_G |f(z)|² dA(z) < ∞, με εσωτερικό γινόμενο 〈f, g〉 = ∫_G f(z)·conj(g(z)) dA(z).",
+                    d: "Όλες οι συνεχείς συναρτήσεις στο G με υπερβολική νόρμα."
+                },
+                correct: "c",
+                explanation:
+                    "Ο **χώρος Bergman L²ₐ(G)** αποτελείται από αναλυτικές (ολόμορφες) συναρτήσεις στο ανοικτό σύνολο G " +
+                    "που είναι ταυτόχρονα τετραγωνικά ολοκληρώσιμες: ∫_G |f(z)|² dA(z) < ∞. Με το εσωτερικό γινόμενο " +
+                    "〈f, g〉 = ∫_G f(z)·conj(g(z)) dA(z) ο L²ₐ(G) γίνεται χώρος Hilbert. Έτσι ο Bergman συνδυάζει " +
+                    "την ανάλυση μιγαδικών (ολoμορφία) με την L²-θεωρία (τετραγωνική ολοκληρωσιμότητα)."
+            }
+        ];
+
+        let currentQuestion = 0;
+
+        const questionNumberSpan = document.getElementById("question-number");
+        const totalQuestionsSpan = document.getElementById("total-questions");
+        const questionTextDiv = document.getElementById("question-text");
+        const answersDiv = document.getElementById("answers");
+        const feedbackDiv = document.getElementById("feedback");
+        const explanationDiv = document.getElementById("explanation");
+        const showExplanationBtn = document.getElementById("showExplanationBtn");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+
+        totalQuestionsSpan.textContent = quiz.length;
+
+        function loadQuestion(index) {
+            const q = quiz[index];
+            questionNumberSpan.textContent = index + 1;
+            questionTextDiv.textContent = q.q;
+
+            answersDiv.innerHTML = "";
+            feedbackDiv.textContent = "";
+            feedbackDiv.className = "";
+            explanationDiv.textContent = "";
+
+            for (const key of ["a", "b", "c", "d"]) {
+                if (!q.answers[key]) continue;
+
+                const label = document.createElement("label");
+                label.className = "answer-option";
+
+                const input = document.createElement("input");
+                input.type = "radio";
+                input.name = "answer";
+                input.value = key;
+
+                label.appendChild(input);
+                label.appendChild(document.createTextNode(" " + q.answers[key]));
+                answersDiv.appendChild(label);
+                answersDiv.appendChild(document.createElement("br"));
+            }
+
+            prevBtn.disabled = (index === 0);
+            nextBtn.disabled = (index === quiz.length - 1);
+        }
+
+        answersDiv.addEventListener("change", function (e) {
+            if (e.target.name !== "answer") return;
+
+            const selected = e.target.value;
+            const correct = quiz[currentQuestion].correct;
+            const isCorrect = (selected === correct);
+
+            feedbackDiv.textContent = isCorrect ? "Σωστό!" : "Λάθος.";
+            feedbackDiv.className = isCorrect ? "correct" : "incorrect";
+        });
+
+        showExplanationBtn.addEventListener("click", function () {
+            const q = quiz[currentQuestion];
+            explanationDiv.textContent = "Εξήγηση: " + q.explanation;
+        });
+
+        prevBtn.addEventListener("click", function () {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion(currentQuestion);
+            }
+        });
+
+        nextBtn.addEventListener("click", function () {
+            if (currentQuestion < quiz.length - 1) {
+                currentQuestion++;
+                loadQuestion(currentQuestion);
+            }
+        });
+
+        // αρχική φόρτωση
+        loadQuestion(currentQuestion);
+    </script>
+
+</body>
+</html>
