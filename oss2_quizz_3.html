@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <title>Quick Check – Βάσεις, Bessel & Fourier</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0 10px 40px 10px;
+        }
+
+        h1 {
+            color: #8b0000;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 2.1rem;
+        }
+
+        h2 {
+            text-align: center;
+            color: #222;
+            margin-top: 0;
+        }
+
+        h3 {
+            text-align: center;
+            color: #b22222;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background-color: #ffffff;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 25px 25px 30px 25px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+        }
+
+        .question-header {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #444;
+        }
+
+        #question-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .answer-option {
+            margin: 8px 0;
+            padding: 6px 8px;
+            border-radius: 4px;
+        }
+
+        .answer-option:hover {
+            background-color: #f0f0f0;
+        }
+
+        .answer-option input {
+            margin-right: 8px;
+        }
+
+        #feedback {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .correct {
+            color: #007700;
+        }
+
+        .incorrect {
+            color: #b00020;
+        }
+
+        #explanation {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px dashed #ccc;
+            font-size: 0.95rem;
+        }
+
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            background-color: #b22222;
+            color: #ffffff;
+            font-size: 0.95rem;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: default;
+        }
+
+        button.secondary {
+            background-color: #666666;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #444;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Μεταπτυχιακές Σπουδές στα Μαθηματικά (ΜΣΜ)</h1>
+    <h2>ΜΣΜ83 – Ανάλυση</h2>
+    <h3>Quick Check – Ορθοκανονικές Βάσεις & Εφαρμογές</h3>
+
+    <div class="card">
+        <div class="quiz-header">
+            Ερώτηση <span id="question-number">1</span> / <span id="total-questions">6</span>
+        </div>
+
+        <div id="question-text"></div>
+        <div id="answers"></div>
+
+        <div id="feedback"></div>
+
+        <div class="buttons">
+            <button id="showExplanationBtn">Εμφάνιση Εξήγησης</button>
+            <button id="prevBtn" class="secondary">Προηγούμενη</button>
+            <button id="nextBtn" class="secondary">Επόμενη</button>
+        </div>
+
+        <div id="explanation"></div>
+    </div>
+
+    <script>
+        const quiz = [
+
+            /* --------------------------- ΕΡΩΤΗΣΗ 1 --------------------------- */
+            {
+                q: "Στο Θεώρημα Ορθογώνιας Προβολής, ποια γεωμετρική ιδιότητα χαρακτηρίζει το βέλτιστο στοιχείο προσέγγισης f₀;",
+                answers: {
+                    a: "Το f₀ είναι παράλληλο με το διάνυσμα h.",
+                    b: "Το διάνυσμα σφάλματος (h - f₀) είναι ορθογώνιο στον υπόχωρο M.",
+                    c: "Το f₀ έχει το ίδιο μήκος με το h.",
+                    d: "Το f₀ είναι το μηδενικό διάνυσμα."
+                },
+                correct: "b",
+                explanation:
+                    "Αυτό είναι το θεμέλιο της θεωρίας προσέγγισης! Αν θέλουμε να προσεγγίσουμε το h με ένα στοιχείο " +
+                    "του υπόχωρου M, το 'κοντινότερο' σημείο f₀ είναι τέτοιο ώστε η διαφορά h - f₀ (το σφάλμα) " +
+                    "να είναι κάθετη στον M. Είναι ακριβώς όπως ρίχνουμε κάθετη σε ένα επίπεδο στον ευκλείδειο χώρο."
+            },
+
+            /* --------------------------- ΕΡΩΤΗΣΗ 2 --------------------------- */
+            {
+                q: "Ποια είναι η διαφορά μεταξύ της Ανισότητας Bessel και της Ταυτότητας Parseval;",
+                answers: {
+                    a: "Η Bessel ισχύει μόνο για πεπερασμένα σύνολα, η Parseval για άπειρα.",
+                    b: "Η Bessel ισχύει για οποιοδήποτε ορθοκανονικό σύνολο, ενώ η Parseval ισχύει ΜΟΝΟ αν το σύνολο είναι Βάση.",
+                    c: "Η Bessel αφορά τα μήκη, η Parseval τις γωνίες.",
+                    d: "Δεν υπάρχει διαφορά, είναι το ίδιο θεώρημα."
+                },
+                correct: "b",
+                explanation:
+                    "Η ανισότητα Bessel Σ|〈h, eₙ〉|² ≤ ‖h‖² ισχύει πάντα (το μέρος δεν υπερβαίνει το όλο). " +
+                    "Η ισότητα (Parseval) Σ|〈h, eₙ〉|² = ‖h‖² ισχύει αν και μόνο αν το σύνολο {eₙ} είναι **Βάση**, " +
+                    "δηλαδή αν μπορούμε να αναπαραστήσουμε πλήρως το h χωρίς απώλεια ενέργειας."
+            },
+
+            /* --------------------------- ΕΡΩΤΗΣΗ 3 --------------------------- */
+            {
+                q: "Τι πετυχαίνουμε με τη διαδικασία Gram-Schmidt;",
+                answers: {
+                    a: "Μετατρέπουμε ένα οποιοδήποτε γραμμικά ανεξάρτητο σύνολο σε ορθοκανονικό σύνολο που παράγει τον ίδιο χώρο.",
+                    b: "Αποδεικνύουμε ότι ο χώρος είναι πλήρης.",
+                    c: "Βρίσκουμε τις ιδιοτιμές ενός τελεστή.",
+                    d: "Μετατρέπουμε έναν χώρο Banach σε χώρο Hilbert."
+                },
+                correct: "a",
+                explanation:
+                    "Η Gram-Schmidt είναι ένας αλγόριθμος που παίρνει διανύσματα h₁, h₂, ... και αφαιρεί από το " +
+                    "καθένα τις προβολές του στα προηγούμενα. Έτσι κατασκευάζει μια ορθοκανονική βάση e₁, e₂, ... " +
+                    "διατηρώντας τον γραμμικό φάκελο (span) σε κάθε βήμα."
+            },
+
+            /* --------------------------- ΕΡΩΤΗΣΗ 4 --------------------------- */
+            {
+                q: "Ποιο είναι το βασικό χαρακτηριστικό ενός Διαχωρίσιμου (Separable) χώρου Hilbert;",
+                answers: {
+                    a: "Έχει πεπερασμένη διάσταση.",
+                    b: "Δεν περιέχει Cauchy ακολουθίες.",
+                    c: "Διαθέτει αριθμήσιμη ορθοκανονική βάση.",
+                    d: "Οι νόρμες του δεν είναι ισοδύναμες."
+                },
+                correct: "c",
+                explanation:
+                    "Ένας χώρος Hilbert είναι διαχωρίσιμος αν έχει πυκνό αριθμήσιμο υποσύνολο. Αυτό ισοδυναμεί με το " +
+                    "να έχει μια **αριθμήσιμη** ορθοκανονική βάση {eₙ}. Αυτό μας επιτρέπει να τον ταυτίσουμε " +
+                    "(ισομορφικά) με τον χώρο ℓ² των ακολουθιών."
+            },
+
+            /* --------------------------- ΕΡΩΤΗΣΗ 5 --------------------------- */
+            {
+                q: "Στη θεωρία Fourier στον L²([0, 2π]), πώς συγκλίνει η σειρά Fourier Sₙ(f) προς τη συνάρτηση f;",
+                answers: {
+                    a: "Σημειακά για κάθε t.",
+                    b: "Ομοιόμορφα σε όλο το διάστημα.",
+                    c: "Στη νόρμα του L² (μέσο τετραγωνικό σφάλμα).",
+                    d: "Δεν συγκλίνει ποτέ."
+                },
+                correct: "c",
+                explanation:
+                    "Αυτό είναι κρίσιμο σημείο! Η θεωρία Hilbert εγγυάται σύγκλιση ως προς τη **νόρμα** του χώρου " +
+                    "(δηλαδή ‖Sₙ - f‖₂ → 0). Δεν εγγυάται ότι η σειρά συγκλίνει σε κάθε σημείο t (σημειακή σύγκλιση) " +
+                    "ούτε ομοιόμορφα, εκτός αν η συνάρτηση είναι πολύ ομαλή."
+            },
+
+            /* --------------------------- ΕΡΩΤΗΣΗ 6 --------------------------- */
+            {
+                q: "Ποια είναι η σχέση μεταξύ του χώρου ℓ² και οποιουδήποτε διαχωρίσιμου απειροδιάστατου χώρου Hilbert H;",
+                answers: {
+                    a: "Είναι εντελώς διαφορετικοί χώροι.",
+                    b: "Είναι ισομετρικά ισομορφικοί (ουσιαστικά 'ο ίδιος' χώρος).",
+                    c: "Ο H είναι πάντα υποσύνολο του ℓ².",
+                    d: "Ο ℓ² είναι υποσύνολο του H."
+                },
+                correct: "b",
+                explanation:
+                    "Το θεώρημα Riesz-Fischer (και η θεωρία βάσεων) μας λέει ότι ΟΛΟΙ οι διαχωρίσιμοι απειροδιάστατοι " +
+                    "χώροι Hilbert είναι ισομορφικοί με τον ℓ². Μπορούμε να αντιστοιχίσουμε κάθε διάνυσμα h με την " +
+                    "ακολουθία των συντελεστών Fourier του. Γεωμετρικά, είναι ο 'ίδιος' χώρος με άλλη 'ενδυμασία'."
+            }
+        ];
+
+        let currentQuestion = 0;
+
+        const questionNumberSpan = document.getElementById("question-number");
+        const totalQuestionsSpan = document.getElementById("total-questions");
+        const questionTextDiv = document.getElementById("question-text");
+        const answersDiv = document.getElementById("answers");
+        const feedbackDiv = document.getElementById("feedback");
+        const explanationDiv = document.getElementById("explanation");
+        const showExplanationBtn = document.getElementById("showExplanationBtn");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+
+        totalQuestionsSpan.textContent = quiz.length;
+
+        function loadQuestion(index) {
+            const q = quiz[index];
+            questionNumberSpan.textContent = index + 1;
+            questionTextDiv.textContent = q.q;
+
+            answersDiv.innerHTML = "";
+            feedbackDiv.textContent = "";
+            feedbackDiv.className = "";
+            explanationDiv.textContent = "";
+
+            for (const key of ["a", "b", "c", "d"]) {
+                if (!q.answers[key]) continue;
+
+                const label = document.createElement("label");
+                label.className = "answer-option";
+
+                const input = document.createElement("input");
+                input.type = "radio";
+                input.name = "answer";
+                input.value = key;
+
+                label.appendChild(input);
+                label.appendChild(document.createTextNode(" " + q.answers[key]));
+                answersDiv.appendChild(label);
+                answersDiv.appendChild(document.createElement("br"));
+            }
+
+            prevBtn.disabled = (index === 0);
+            nextBtn.disabled = (index === quiz.length - 1);
+        }
+
+        answersDiv.addEventListener("change", function (e) {
+            if (e.target.name !== "answer") return;
+
+            const selected = e.target.value;
+            const correct = quiz[currentQuestion].correct;
+            const isCorrect = (selected === correct);
+
+            feedbackDiv.textContent = isCorrect ? "Σωστό!" : "Λάθος.";
+            feedbackDiv.className = isCorrect ? "correct" : "incorrect";
+        });
+
+        showExplanationBtn.addEventListener("click", function () {
+            const q = quiz[currentQuestion];
+            explanationDiv.textContent = "Εξήγηση: " + q.explanation;
+        });
+
+        prevBtn.addEventListener("click", function () {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion(currentQuestion);
+            }
+        });
+
+        nextBtn.addEventListener("click", function () {
+            if (currentQuestion < quiz.length - 1) {
+                currentQuestion++;
+                loadQuestion(currentQuestion);
+            }
+        });
+
+        // αρχική φόρτωση
+        loadQuestion(currentQuestion);
+    </script>
+
+</body>
+</html>
